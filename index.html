@@ -154,6 +154,12 @@
       font-size: 2rem; line-height: 1; color: var(--text); transition: color .3s;
     }
     .lightbox button:hover { color: var(--accent); }
+    .lightbox img { transition: opacity .25s; cursor: default; touch-action: pan-y; }
+    .lightbox img.swap { opacity: 0; }
+    .lightbox .lb-nav { top: 50%; transform: translateY(-50%); font-size: 2.6rem; padding: 12px 18px; }
+    .lightbox .lb-prev { left: 12px; right: auto; }
+    .lightbox .lb-next { right: 12px; }
+    @media (max-width: 768px) { .lightbox .lb-nav { font-size: 2rem; padding: 10px; } }
 
     /* ---------- contact ---------- */
     .contact { text-align: center; }
@@ -187,6 +193,8 @@
 
       /* Lookbook: 페이지마다 사진 3장이 100svh 안에 들어오게 높이(--H) 기준으로 배치 */
       .lookbook-page { --H: clamp(300px, min(calc(100svh - 300px), 36vw), 640px); }
+      /* 2페이지(제목 없음): 가장 큰 사진이 화면 높이의 약 72%. 가로 폭이 모자라지 않게 폭 기준 상한도 둠 */
+      .lookbook2.lookbook-page { --H: clamp(300px, min(72svh, calc((88vw - 80px) / 1.825), 860px), 860px); }
       .look-grid { display: flex; justify-content: center; align-items: flex-start; height: var(--H); margin-top: clamp(24px, 4svh, 48px); }
       .lookbook2 .look-grid { margin-top: 0; }
       .look { flex: none; width: auto; }
@@ -205,6 +213,15 @@
         background: transparent; border: 1px solid #333; box-shadow: 0 0 0 1px rgba(255,255,255,.7);
         transition: background .3s, border-color .3s, transform .3s var(--ease);
       }
+      .dots button { position: relative; }
+      .dots button::before { /* 마우스를 올리면 점 왼쪽에 섹션 이름 표시 */
+        content: attr(data-label); position: absolute; right: calc(100% + 14px); top: 50%;
+        transform: translate(6px, -50%); white-space: nowrap; pointer-events: none;
+        padding: 3px 10px; border-radius: 999px; background: rgba(255,255,255,.94); color: var(--text);
+        font: 400 .7rem/1.5 var(--sans); letter-spacing: .12em; box-shadow: 0 1px 8px rgba(0,0,0,.12);
+        opacity: 0; transition: opacity .25s, transform .3s var(--ease);
+      }
+      .dots button:hover::before, .dots button:focus-visible::before { opacity: 1; transform: translate(0, -50%); }
       .dots button:hover { border-color: var(--accent); transform: scale(1.25); }
       .dots button[aria-current="true"] { background: var(--accent); border-color: var(--accent); }
     }
@@ -213,6 +230,7 @@
     @media (max-width: 768px) {
       :root { --gap: 24px; }
       section { padding: 72px 6vw; }
+      .lookbook:not(.lookbook2) { padding-bottom: var(--gap); } /* look3~look4 사이도 다른 사진과 같은 간격 */
       .lookbook2 { padding-top: 0; }
       .hero > img { object-position: 44% center; }
       .profile-grid { grid-template-columns: 1fr; gap: 40px; }
@@ -232,7 +250,7 @@
 
   <!-- HERO -->
   <header class="hero page" id="hero" data-file="hero.jpg">
-    <img src="images/hero.jpg" alt="Jeongjae Song 대표 사진" onerror="imgFail(this)">
+    <img src="images/hero.jpg" alt="Close-up portrait of Jeongjae Song smiling in a white shirt against a light grey backdrop" onerror="imgFail(this)">
     <div class="hero-text">
       <h1 id="heroName" class="reveal">Jeongjae Song</h1>
       <div class="role reveal">Senior Model</div>
@@ -244,7 +262,7 @@
   <section class="profile page" id="profile">
     <div class="wrap profile-grid">
       <div class="profile-photo zoom reveal" data-file="profile.jpg">
-        <img src="images/profile.jpg" alt="Jeongjae Song 프로필 흑백 사진" loading="lazy" onerror="imgFail(this)">
+        <img src="images/profile.jpg" alt="Black-and-white portrait of Jeongjae Song smiling in a white shirt and jeans with a hand in the pocket" loading="lazy" onerror="imgFail(this)">
       </div>
       <!-- PROFILE 수치: Height / Size / Shoe 세 가지만 표시 -->
       <dl class="stats reveal">
@@ -260,9 +278,9 @@
     <div class="wrap">
       <h2 class="section-title reveal">Lookbook</h2>
       <div class="look-grid">
-        <figure class="look look-1 zoom reveal" data-file="look1.jpg"><img src="images/look1.jpg" alt="Lookbook 1" loading="lazy" onerror="imgFail(this)"></figure>
-        <figure class="look look-2 zoom reveal" data-file="look2.jpg"><img src="images/look2.jpg" alt="Lookbook 2" loading="lazy" onerror="imgFail(this)"></figure>
-        <figure class="look look-3 zoom reveal" data-file="look3.jpg"><img src="images/look3.jpg" alt="Lookbook 3" loading="lazy" onerror="imgFail(this)"></figure>
+        <figure class="look look-1 zoom reveal" data-file="look1.jpg"><img src="images/look1.jpg" alt="Jeongjae Song smiling in a red hanbok in a garden" loading="lazy" onerror="imgFail(this)"></figure>
+        <figure class="look look-2 zoom reveal" data-file="look2.jpg"><img src="images/look2.jpg" alt="Jeongjae Song in a white shirt, blue jeans and black heels posing in profile in a studio" loading="lazy" onerror="imgFail(this)"></figure>
+        <figure class="look look-3 zoom reveal" data-file="look3.jpg"><img src="images/look3.jpg" alt="Jeongjae Song in a navy cropped blazer and white trousers with hands in pockets" loading="lazy" onerror="imgFail(this)"></figure>
       </div>
     </div>
   </section>
@@ -271,9 +289,9 @@
   <section class="lookbook lookbook-page lookbook2 page" id="lookbook2">
     <div class="wrap">
       <div class="look-grid">
-        <figure class="look look-4 zoom reveal" data-file="look4.jpg"><img src="images/look4.jpg" alt="Lookbook 4" loading="lazy" onerror="imgFail(this)"></figure>
-        <figure class="look look-5 zoom reveal" data-file="look5.jpg"><img src="images/look5.jpg" alt="Lookbook 5" loading="lazy" onerror="imgFail(this)"></figure>
-        <figure class="look look-6 zoom reveal" data-file="look6.jpg"><img src="images/look6.jpg" alt="Lookbook 6" loading="lazy" onerror="imgFail(this)"></figure>
+        <figure class="look look-4 zoom reveal" data-file="look4.jpg"><img src="images/look4.jpg" alt="Jeongjae Song smiling with a hand on the hip in a black top and pleated skirt" loading="lazy" onerror="imgFail(this)"></figure>
+        <figure class="look look-5 zoom reveal" data-file="look5.jpg"><img src="images/look5.jpg" alt="Jeongjae Song in a white shirt and blue jeans standing in a studio" loading="lazy" onerror="imgFail(this)"></figure>
+        <figure class="look look-6 zoom reveal" data-file="look6.jpg"><img src="images/look6.jpg" alt="Jeongjae Song in an olive knit sweater and light jeans with arms crossed" loading="lazy" onerror="imgFail(this)"></figure>
       </div>
     </div>
   </section>
@@ -298,6 +316,8 @@
   <!-- LIGHTBOX -->
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="사진 크게 보기">
     <button type="button" id="lbClose" aria-label="닫기">&times;</button>
+    <button type="button" class="lb-nav lb-prev" id="lbPrev" aria-label="이전 사진">&#8249;</button>
+    <button type="button" class="lb-nav lb-next" id="lbNext" aria-label="다음 사진">&#8250;</button>
     <img id="lbImg" src="" alt="">
   </div>
 
@@ -344,27 +364,58 @@ const CONFIG = {
   /* 라이트박스 */
   const lb = $("lightbox"), lbImg = $("lbImg");
   const root = document.documentElement;
-  const close = () => { lb.classList.remove("open"); root.classList.remove("lb-open"); };
-  document.querySelectorAll(".look").forEach((fig) => {
-    fig.addEventListener("click", () => {
-      if (fig.classList.contains("ph")) return;
-      const img = fig.querySelector("img");
-      lbImg.src = img.src; lbImg.alt = img.alt;
-      lb.classList.add("open");
-      root.classList.add("lb-open"); /* 스크롤 잠금 */
-    });
+  const looks = [...document.querySelectorAll(".look")].sort((a, b) => a.dataset.file.localeCompare(b.dataset.file)); /* look1~look6 순서 */
+  let lbIdx = 0, lastFocus = null;
+  const loaded = () => looks.filter((f) => !f.classList.contains("ph"));
+  const show = (i, fade) => {
+    const list = loaded();
+    if (!list.length) return;
+    lbIdx = (i + list.length) % list.length; /* 처음↔끝 순환 */
+    const img = list[lbIdx].querySelector("img");
+    const apply = () => { lbImg.src = img.currentSrc || img.src; lbImg.alt = img.alt; lbImg.classList.remove("swap"); };
+    if (fade) { lbImg.classList.add("swap"); setTimeout(apply, 180); } else apply();
+  };
+  const open = (fig) => {
+    lastFocus = document.activeElement;
+    show(loaded().indexOf(fig), false);
+    lb.classList.add("open");
+    root.classList.add("lb-open"); /* 뒤 페이지 스크롤 잠금 */
+    $("lbClose").focus({ preventScroll: true });
+  };
+  const close = () => {
+    if (!lb.classList.contains("open")) return;
+    lb.classList.remove("open"); root.classList.remove("lb-open");
+    if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+  };
+  looks.forEach((fig) => fig.addEventListener("click", () => { if (!fig.classList.contains("ph")) open(fig); }));
+  $("lbPrev").addEventListener("click", (e) => { e.stopPropagation(); show(lbIdx - 1, true); });
+  $("lbNext").addEventListener("click", (e) => { e.stopPropagation(); show(lbIdx + 1, true); });
+  $("lbClose").addEventListener("click", (e) => { e.stopPropagation(); close(); });
+  /* 바깥(배경) 클릭으로 닫기: 사진·버튼 클릭은 제외 */
+  lb.addEventListener("click", (e) => { if (e.target === lb) close(); });
+  document.addEventListener("keydown", (e) => {
+    if (!lb.classList.contains("open")) return;
+    if (e.key === "Escape") close();
+    else if (e.key === "ArrowLeft") { e.preventDefault(); show(lbIdx - 1, true); }
+    else if (e.key === "ArrowRight") { e.preventDefault(); show(lbIdx + 1, true); }
   });
-  lb.addEventListener("click", (e) => { if (e.target !== lbImg) close(); });
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+  /* 모바일: 좌우 스와이프로 이동 */
+  let tx = 0, ty = 0;
+  lb.addEventListener("touchstart", (e) => { tx = e.changedTouches[0].clientX; ty = e.changedTouches[0].clientY; }, { passive: true });
+  lb.addEventListener("touchend", (e) => {
+    const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) show(lbIdx + (dx < 0 ? 1 : -1), true);
+  }, { passive: true });
 
   /* 점 내비게이션: 5개 페이지, 현재 페이지 표시 + 클릭 이동 */
   const pages = [...document.querySelectorAll(".page")];
-  const labels = ["Hero", "Profile", "Lookbook", "Lookbook 2", "Contact"];
+  const labels = ["Home", "Profile", "Lookbook", "Lookbook 2", "Contact"];
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
   const dots = pages.map((p, i) => {
     const b = document.createElement("button");
     b.type = "button";
     b.setAttribute("aria-label", labels[i] || "Page " + (i + 1));
+    b.dataset.label = labels[i] || "Page " + (i + 1);
     b.addEventListener("click", () => p.scrollIntoView({ behavior: reduce.matches ? "auto" : "smooth", block: "start" }));
     $("dots").appendChild(b);
     return b;
