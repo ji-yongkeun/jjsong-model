@@ -15,7 +15,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Jeongjae Song — Senior Model</title>
   <meta name="description" content="Jeongjae Song — Senior Model portfolio">
 
@@ -226,15 +226,40 @@
       .dots button[aria-current="true"] { background: var(--accent); border-color: var(--accent); }
     }
 
-    /* ---------- responsive (모바일: 스냅 없이 자연 스크롤) ---------- */
+    /* ---------- responsive (모바일 ≤768px: 가벼운 스냅 + 사진은 원본 비율로 한 화면에 전체 표시) ---------- */
     @media (max-width: 768px) {
-      :root { --gap: 24px; }
+      :root { --gap: 32px; }
+      html { scroll-snap-type: y proximity; } /* mandatory 아님: 스냅은 가까울 때만 */
       section { padding: 72px 6vw; }
-      .lookbook:not(.lookbook2) { padding-bottom: var(--gap); } /* look3~look4 사이도 다른 사진과 같은 간격 */
-      .lookbook2 { padding-top: 0; }
+
+      /* 높이는 svh만 사용 (주소창 접힘에도 어긋나지 않게) */
+      .hero { scroll-snap-align: center; }
+      .hero-text { padding-bottom: calc(8svh + env(safe-area-inset-bottom)); }
       .hero > img { object-position: 44% center; }
+
+      /* Profile: 사진 전체(머리~손)가 한 화면에, 수치 3줄도 한 화면 안에 */
       .profile-grid { grid-template-columns: 1fr; gap: 40px; }
-      .stats .row { padding: 1.6rem 0; }
+      .profile-photo { aspect-ratio: auto; display: flex; justify-content: center; background: transparent; scroll-snap-align: center; }
+      .profile-photo.ph { aspect-ratio: 2 / 3; max-height: 72svh; background: #EEE; }
+      .profile-photo img { width: auto; height: auto; max-width: 100%; max-height: 72svh; object-fit: contain; }
+      .stats { scroll-snap-align: center; }
+      .stats .row { padding: clamp(.9rem, 2.6svh, 1.6rem) 0; }
+      .stats dd { font-size: clamp(2rem, 5.6svh, 3rem); }
+
+      /* Lookbook: 원본 비율 그대로(잘림 없음), 가운데 정렬, 사진 사이 32px */
+      .lookbook:not(.lookbook2) { padding-top: 40px; padding-bottom: var(--gap); } /* 제목+첫 사진이 한 화면에 */
+      .lookbook2 { padding-top: 0; }
+      .lookbook .section-title { scroll-snap-align: start; scroll-margin-top: 28px; }
+      .look-grid { margin-top: 32px; }
+      .look { aspect-ratio: auto; display: flex; justify-content: center; background: transparent; scroll-snap-align: center; }
+      .look.ph { aspect-ratio: auto; min-height: 50svh; background: #EEE; }
+      .look img { width: auto; height: auto; max-width: 100%; max-height: 78svh; object-fit: contain; }
+      .look-1 { scroll-snap-align: none; } /* 첫 사진은 제목(start 스냅)과 함께 보이도록 */
+      .look-1 img { max-height: 62svh; }
+
+      /* Contact: 100svh, 아래 안전 영역 확보 */
+      .contact { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; scroll-snap-align: center;
+                 padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
       .email-text { display: none; }
       .btns { flex-direction: column; }
       .btn { width: 100%; max-width: 280px; text-align: center; }
