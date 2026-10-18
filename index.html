@@ -87,18 +87,18 @@
     .hero.ph::before { display: none; }
     .hero.ph h1 { text-shadow: none; }
     .hero.ph::after { top: auto; bottom: 24px; }
-    .hero > img { position: absolute; inset: 0; object-position: center 20%; }
+    .hero > img { position: absolute; inset: 0; object-position: 46% 41%; }
     .hero::before {
       content: ""; position: absolute; inset: 0; z-index: 1;
       background: linear-gradient(180deg, rgba(0,0,0,.12) 0%, rgba(0,0,0,.18) 40%, rgba(0,0,0,.45) 100%);
     }
     .hero-text {
       position: absolute; inset: 0; z-index: 2;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      text-align: center; padding: 0 5vw;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      text-align: center; padding: 0 5vw 5vh; /* 얼굴을 가리지 않도록 제목을 아래쪽에 배치 */
     }
     .hero h1 {
-      font-size: clamp(3rem, 12vw, 9.5rem);
+      font-size: clamp(3rem, 9vw, 7.5rem);
       line-height: 1; letter-spacing: .01em; font-weight: 400;
       text-shadow: 0 2px 30px rgba(0,0,0,.25);
     }
@@ -114,7 +114,7 @@
     /* ---------- profile ---------- */
     .profile-grid { display: grid; grid-template-columns: 5fr 6fr; gap: clamp(40px, 8vw, 120px); align-items: center; }
     .profile-photo { aspect-ratio: 3 / 4; }
-    .profile-photo img { filter: grayscale(100%); }
+    .profile-photo img { filter: grayscale(100%); object-position: 50% 0%; }
     .stats { list-style: none; }
     .stats .row { padding: 2.2rem 0; border-bottom: 1px solid var(--accent); }
     .stats .row:first-child { border-top: 1px solid var(--accent); }
@@ -125,16 +125,23 @@
     .lookbook .wrap { max-width: 1280px; }
     .look-grid { display: grid; grid-template-columns: 5fr 3fr 4fr; gap: var(--gap); margin-top: clamp(48px, 7vw, 88px); align-items: start; }
     .look-col { display: flex; flex-direction: column; gap: var(--gap); }
-    .col-b { margin-top: 120px; }
+    .col-b { margin-top: 160px; }
     .col-c { margin-top: 40px; }
     .look { cursor: zoom-in; background: #EEE; }
     .look.ph { cursor: default; }
-    .look-1 { aspect-ratio: 3 / 4.5; }
-    .look-6 { aspect-ratio: 4 / 5; width: 72%; align-self: flex-end; }
-    .look-2 { aspect-ratio: 3 / 4; }
+    /* 사진이 모두 세로형이라 원본 비율(2:3, 3:4)에 가까운 칸으로 구성. 얼굴 기준 object-position은 사진별로 지정 */
+    .look-1 { aspect-ratio: 2 / 3; }
+    .look-1 img { object-position: 52% 30%; }
+    .look-6 { aspect-ratio: 2 / 3; width: 72%; align-self: flex-end; }
+    .look-6 img { object-position: 52% 22%; }
+    .look-2 { aspect-ratio: 2 / 3; }
+    .look-2 img { object-position: 55% 20%; }
     .look-3 { aspect-ratio: 3 / 4; }
-    .look-4 { aspect-ratio: 4 / 3; }
-    .look-5 { aspect-ratio: 3 / 4.2; }
+    .look-3 img { object-position: 54% 15%; }
+    .look-4 { aspect-ratio: 3 / 4; }
+    .look-4 img { object-position: 50% 30%; }
+    .look-5 { aspect-ratio: 2 / 3; }
+    .look-5 img { object-position: 54% 15%; }
 
     /* ---------- lightbox ---------- */
     .lightbox {
@@ -168,6 +175,7 @@
     @media (max-width: 768px) {
       :root { --gap: 24px; }
       section { padding: 72px 6vw; }
+      .hero > img { object-position: 44% center; }
       .profile-grid { grid-template-columns: 1fr; gap: 40px; }
       .stats .row { padding: 1.6rem 0; }
       .look-grid { grid-template-columns: 1fr; }
@@ -262,7 +270,7 @@ const CONFIG = {
   nameKo: "송정재",   // 한글 이름이 다르면 수정
   tagline: "Bright, warm and full of life",
   email: "sjj0119@naver.com",
-  phone: "010-2105-4031"   // 비우면 Call 버튼 숨김
+  phone: ""   //비우면 Call 버튼 숨김
 };
 
 (function () {
