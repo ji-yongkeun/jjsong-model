@@ -226,40 +226,52 @@
       .dots button[aria-current="true"] { background: var(--accent); border-color: var(--accent); }
     }
 
-    /* ---------- responsive (모바일 ≤768px: 가벼운 스냅 + 사진은 원본 비율로 한 화면에 전체 표시) ---------- */
+    /* ---------- responsive (모바일 ≤768px: 화면 한 장씩 붙는 스냅 스크롤, 총 10화면) ----------
+       1 Hero / 2 Profile 사진 / 3 Profile 수치 / 4 Lookbook 제목+look1 / 5~9 look2~6 / 10 Contact
+       모든 높이는 svh만 사용 (주소창이 접혀도 어긋나지 않게) */
     @media (max-width: 768px) {
-      :root { --gap: 32px; }
-      html { scroll-snap-type: y proximity; } /* mandatory 아님: 스냅은 가까울 때만 */
-      section { padding: 72px 6vw; }
+      html { scroll-snap-type: y mandatory; }
+      html.lb-open { overflow: hidden; }                       /* 라이트박스 열림: 뒤 페이지 스크롤 잠금 */
+      .lightbox { touch-action: none; overscroll-behavior: contain; }
+      .reveal { transform: none; }                             /* 스냅 위치가 어긋나지 않게 투명도만 변경 */
+      .zoom:hover img { transform: none; }
+      .profile, .lookbook { padding: 0; }
 
-      /* 높이는 svh만 사용 (주소창 접힘에도 어긋나지 않게) */
-      .hero { scroll-snap-align: center; }
+      /* 1) Hero */
+      .hero { height: 100svh; scroll-snap-align: start; scroll-snap-stop: always; }
       .hero-text { padding-bottom: calc(8svh + env(safe-area-inset-bottom)); }
       .hero > img { object-position: 44% center; }
 
-      /* Profile: 사진 전체(머리~손)가 한 화면에, 수치 3줄도 한 화면 안에 */
-      .profile-grid { grid-template-columns: 1fr; gap: 40px; }
-      .profile-photo { aspect-ratio: auto; display: flex; justify-content: center; background: transparent; scroll-snap-align: center; }
-      .profile-photo.ph { aspect-ratio: 2 / 3; max-height: 72svh; background: #EEE; }
-      .profile-photo img { width: auto; height: auto; max-width: 100%; max-height: 72svh; object-fit: contain; }
-      .stats { scroll-snap-align: center; }
-      .stats .row { padding: clamp(.9rem, 2.6svh, 1.6rem) 0; }
-      .stats dd { font-size: clamp(2rem, 5.6svh, 3rem); }
+      /* 2) Profile 사진: 사진만 단독 화면 (머리~손 전체, 비율 유지) */
+      .profile-grid { display: block; }
+      .profile-photo { height: 100svh; aspect-ratio: auto; display: flex; align-items: center; justify-content: center; padding: 0 6vw;
+                       background: transparent; scroll-snap-align: start; scroll-snap-stop: always; }
+      .profile-photo.ph { background: #EEE; }
+      .profile-photo img { width: auto; height: auto; max-width: 100%; max-height: 82svh; object-fit: contain; }
 
-      /* Lookbook: 원본 비율 그대로(잘림 없음), 가운데 정렬, 사진 사이 32px */
-      .lookbook:not(.lookbook2) { padding-top: 40px; padding-bottom: var(--gap); } /* 제목+첫 사진이 한 화면에 */
-      .lookbook2 { padding-top: 0; }
-      .lookbook .section-title { scroll-snap-align: start; scroll-margin-top: 28px; }
-      .look-grid { margin-top: 32px; }
-      .look { aspect-ratio: auto; display: flex; justify-content: center; background: transparent; scroll-snap-align: center; }
-      .look.ph { aspect-ratio: auto; min-height: 50svh; background: #EEE; }
-      .look img { width: auto; height: auto; max-width: 100%; max-height: 78svh; object-fit: contain; }
-      .look-1 { scroll-snap-align: none; } /* 첫 사진은 제목(start 스냅)과 함께 보이도록 */
+      /* 3) Profile 수치: 세 줄만 단독 화면 */
+      .stats { height: 100svh; display: flex; flex-direction: column; justify-content: center; padding: 0 6vw;
+               scroll-snap-align: start; scroll-snap-stop: always; }
+      .stats .row { padding: clamp(1.4rem, 4svh, 2.4rem) 0; }
+      .stats dd { font-size: clamp(2.4rem, 7svh, 3.6rem); }
+
+      /* 4) Lookbook 첫 화면: 제목 22svh + look1 78svh = 100svh */
+      .lookbook .wrap { max-width: none; }
+      .lookbook .section-title { height: 22svh; margin: 0; padding: 8svh 0 2svh; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+                                 scroll-snap-align: start; scroll-snap-stop: always; }
+      .look-grid { display: block; margin: 0; }
+
+      /* 5~9) look2~look6: 사진 한 장당 한 화면 */
+      .look { height: 100svh; aspect-ratio: auto; display: flex; align-items: center; justify-content: center; padding: 0 6vw;
+              background: transparent; pointer-events: none; scroll-snap-align: start; scroll-snap-stop: always; } /* 빈 곳 탭으로는 안 열리게 */
+      .look.ph { background: #EEE; }
+      .look img { width: auto; height: auto; max-width: 100%; max-height: 82svh; object-fit: contain; pointer-events: auto; }
+      .look-1 { height: 78svh; scroll-snap-align: none; scroll-snap-stop: normal; } /* 제목과 한 화면(22+78svh)이므로 스냅 대상은 제목 */
       .look-1 img { max-height: 62svh; }
 
-      /* Contact: 100svh, 아래 안전 영역 확보 */
-      .contact { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; scroll-snap-align: center;
-                 padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+      /* 10) Contact: 100svh, 아래 안전 영역 확보 */
+      .contact { min-height: 100svh; display: flex; flex-direction: column; justify-content: center;
+                 scroll-snap-align: start; scroll-snap-stop: always; padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
       .email-text { display: none; }
       .btns { flex-direction: column; }
       .btn { width: 100%; max-width: 280px; text-align: center; }
