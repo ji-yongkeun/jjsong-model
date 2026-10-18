@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  수정할 위치 안내 (Jeongjae Song Portfolio)
+  ------------------------------------------------------------
+  1) 이름·한글이름·소개문구·이메일·전화번호 → 맨 아래 <script> 최상단 CONFIG
+     (전화번호를 "" 로 비우면 Call 버튼이 숨겨집니다)
+  2) Height / Size / Shoe 수치 → "PROFILE 수치" 주석이 있는 <dl> 부분
+  3) 검색 노출 차단(noindex) → <head> 안 "NOINDEX" 주석의 <meta name="robots"> 한 줄
+     (검색에 노출하려면 그 줄을 삭제하세요)
+  4) Open Graph 설명 → <head> 안 og:description
+  5) 이미지 → images/ 폴더: hero.jpg, profile.jpg, look1.jpg ~ look6.jpg
+  ============================================================
+-->
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jeongjae Song — Senior Model</title>
+  <meta name="description" content="Jeongjae Song — Senior Model portfolio">
+
+  <!-- NOINDEX: 검색 노출 방지. 공개할 준비가 되면 아래 한 줄을 삭제하세요 -->
+  <meta name="robots" content="noindex, nofollow">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Jeongjae Song — Senior Model">
+  <meta property="og:description" content="Jeongjae Song — Senior Model">
+  <meta property="og:image" content="images/hero.jpg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+  <script>
+    /* 이미지 로드 실패 → 회색 placeholder (파일명 표시). onerror가 바로 쓰도록 head에 둠 */
+    function imgFail(img) {
+      var box = img.closest("[data-file]");
+      if (box) box.classList.add("ph");
+    }
+  </script>
+
+  <style>
+    :root {
+      --bg: #FFFFFF;
+      --text: #333333;
+      --accent: #E07A5F;
+      --serif: "Playfair Display", "Noto Serif KR", serif;
+      --sans: "Noto Sans KR", "Pretendard", system-ui, sans-serif;
+      --gap: 40px;
+      --ease: cubic-bezier(.22, .8, .3, 1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    h1, h2 { font-family: var(--serif); font-weight: 500; }
+
+    /* ---------- reveal (fade-in) ---------- */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* ---------- image placeholder ---------- */
+    .ph { background: #EEE; position: relative; }
+    .ph img { visibility: hidden; }
+    .ph::after {
+      content: attr(data-file);
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .85rem; letter-spacing: .1em; color: #999;
+    }
+
+    /* ---------- hover zoom ---------- */
+    .zoom { overflow: hidden; }
+    .zoom img { transition: transform .6s var(--ease); }
+    .zoom:hover img { transform: scale(1.03); }
+
+    /* ---------- hero ---------- */
+    .hero { position: relative; height: 100vh; min-height: 520px; color: #fff; overflow: hidden; background: #EEE; }
+    .hero.ph { color: #333; }
+    .hero.ph::before { display: none; }
+    .hero.ph h1 { text-shadow: none; }
+    .hero.ph::after { top: auto; bottom: 24px; }
+    .hero > img { position: absolute; inset: 0; object-position: center 20%; }
+    .hero::before {
+      content: ""; position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(180deg, rgba(0,0,0,.12) 0%, rgba(0,0,0,.18) 40%, rgba(0,0,0,.45) 100%);
+    }
+    .hero-text {
+      position: absolute; inset: 0; z-index: 2;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 0 5vw;
+    }
+    .hero h1 {
+      font-size: clamp(3rem, 12vw, 9.5rem);
+      line-height: 1; letter-spacing: .01em; font-weight: 400;
+      text-shadow: 0 2px 30px rgba(0,0,0,.25);
+    }
+    .hero .role { margin-top: 1.6rem; font-size: clamp(.75rem, 1.4vw, .95rem); letter-spacing: .45em; text-transform: uppercase; font-weight: 400; padding-left: .45em; }
+    .hero .tagline { margin-top: .9rem; font-family: var(--serif); font-style: italic; font-size: clamp(.95rem, 1.8vw, 1.25rem); opacity: .92; }
+
+    /* ---------- sections ---------- */
+    section { padding: clamp(80px, 12vw, 160px) 6vw; }
+    .wrap { max-width: 1200px; margin: 0 auto; }
+    .section-title { font-size: clamp(2rem, 4.5vw, 3.4rem); text-align: center; }
+    .section-title::after { content: ""; display: block; width: 56px; height: 1px; background: var(--accent); margin: 1.2rem auto 0; }
+
+    /* ---------- profile ---------- */
+    .profile-grid { display: grid; grid-template-columns: 5fr 6fr; gap: clamp(40px, 8vw, 120px); align-items: center; }
+    .profile-photo { aspect-ratio: 3 / 4; }
+    .profile-photo img { filter: grayscale(100%); }
+    .stats { list-style: none; }
+    .stats .row { padding: 2.2rem 0; border-bottom: 1px solid var(--accent); }
+    .stats .row:first-child { border-top: 1px solid var(--accent); }
+    .stats dt { font-size: .75rem; letter-spacing: .35em; text-transform: uppercase; font-weight: 400; color: #777; }
+    .stats dd { font-variant-numeric: lining-nums tabular-nums; font-family: var(--serif); font-size: clamp(2.4rem, 5vw, 4rem); line-height: 1.15; margin-top: .4rem; }
+
+    /* ---------- lookbook ---------- */
+    .lookbook .wrap { max-width: 1280px; }
+    .look-grid { display: grid; grid-template-columns: 5fr 3fr 4fr; gap: var(--gap); margin-top: clamp(48px, 7vw, 88px); align-items: start; }
+    .look-col { display: flex; flex-direction: column; gap: var(--gap); }
+    .col-b { margin-top: 120px; }
+    .col-c { margin-top: 40px; }
+    .look { cursor: zoom-in; background: #EEE; }
+    .look.ph { cursor: default; }
+    .look-1 { aspect-ratio: 3 / 4.5; }
+    .look-6 { aspect-ratio: 4 / 5; width: 72%; align-self: flex-end; }
+    .look-2 { aspect-ratio: 3 / 4; }
+    .look-3 { aspect-ratio: 3 / 4; }
+    .look-4 { aspect-ratio: 4 / 3; }
+    .look-5 { aspect-ratio: 3 / 4.2; }
+
+    /* ---------- lightbox ---------- */
+    .lightbox {
+      position: fixed; inset: 0; z-index: 100; background: rgba(255,255,255,.96);
+      display: flex; align-items: center; justify-content: center; padding: 4vw;
+      opacity: 0; visibility: hidden; transition: opacity .4s var(--ease), visibility .4s; cursor: zoom-out;
+    }
+    .lightbox.open { opacity: 1; visibility: visible; }
+    .lightbox img { width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 20px 60px rgba(0,0,0,.15); }
+    .lightbox button {
+      position: absolute; top: 20px; right: 24px; background: none; border: 0; cursor: pointer;
+      font-size: 2rem; line-height: 1; color: var(--text); transition: color .3s;
+    }
+    .lightbox button:hover { color: var(--accent); }
+
+    /* ---------- contact ---------- */
+    .contact { text-align: center; }
+    .contact p.lead { margin-top: 2rem; font-family: var(--serif); font-style: italic; font-size: clamp(1.1rem, 2.2vw, 1.5rem); }
+    .btns { margin-top: 2.6rem; display: flex; justify-content: center; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .btn {
+      display: inline-block; padding: .9rem 2.6rem; border: 1px solid var(--accent); color: var(--accent);
+      text-decoration: none; font-size: .8rem; letter-spacing: .3em; text-transform: uppercase; font-weight: 400;
+      transition: background .3s, color .3s, transform .3s var(--ease);
+    }
+    .btn:hover { background: var(--accent); color: #fff; transform: translateY(-2px); }
+    .btn[hidden] { display: none; }
+    .email-text { font-size: .85rem; color: #777; margin-left: 12px; }
+    footer { text-align: center; font-size: .75rem; letter-spacing: .15em; color: #999; padding: 0 6vw 48px; }
+
+    /* ---------- responsive ---------- */
+    @media (max-width: 768px) {
+      :root { --gap: 24px; }
+      section { padding: 72px 6vw; }
+      .profile-grid { grid-template-columns: 1fr; gap: 40px; }
+      .stats .row { padding: 1.6rem 0; }
+      .look-grid { grid-template-columns: 1fr; }
+      .look-col { display: contents; }
+      .look-1 { order: 1; } .look-2 { order: 2; } .look-3 { order: 3; }
+      .look-4 { order: 4; } .look-5 { order: 5; } .look-6 { order: 6; }
+      .col-b, .col-c { margin-top: 0; }
+      .look-6 { width: 100%; align-self: auto; }
+      .email-text { display: none; }
+      .btns { flex-direction: column; }
+      .btn { width: 100%; max-width: 280px; text-align: center; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { transition: none; opacity: 1; transform: none; }
+      .zoom img, .btn { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero" data-file="hero.jpg">
+    <img src="images/hero.jpg" alt="Jeongjae Song 대표 사진" onerror="imgFail(this)">
+    <div class="hero-text">
+      <h1 id="heroName" class="reveal">Jeongjae Song</h1>
+      <div class="role reveal">Senior Model</div>
+      <div class="tagline reveal" id="tagline"></div>
+    </div>
+  </header>
+
+  <!-- PROFILE -->
+  <section class="profile" id="profile">
+    <div class="wrap profile-grid">
+      <div class="profile-photo zoom reveal" data-file="profile.jpg">
+        <img src="images/profile.jpg" alt="Jeongjae Song 프로필 흑백 사진" loading="lazy" onerror="imgFail(this)">
+      </div>
+      <!-- PROFILE 수치: Height / Size / Shoe 세 가지만 표시 -->
+      <dl class="stats reveal">
+        <div class="row"><dt>Height</dt><dd>160cm</dd></div>
+        <div class="row"><dt>Size</dt><dd>M (55)</dd></div>
+        <div class="row"><dt>Shoe</dt><dd>235mm</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- LOOKBOOK -->
+  <section class="lookbook" id="lookbook">
+    <div class="wrap">
+      <h2 class="section-title reveal">Lookbook</h2>
+      <div class="look-grid">
+        <div class="look-col col-a">
+          <figure class="look look-1 zoom reveal" data-file="look1.jpg"><img src="images/look1.jpg" alt="Lookbook 1" loading="lazy" onerror="imgFail(this)"></figure>
+          <figure class="look look-6 zoom reveal" data-file="look6.jpg"><img src="images/look6.jpg" alt="Lookbook 6" loading="lazy" onerror="imgFail(this)"></figure>
+        </div>
+        <div class="look-col col-b">
+          <figure class="look look-2 zoom reveal" data-file="look2.jpg"><img src="images/look2.jpg" alt="Lookbook 2" loading="lazy" onerror="imgFail(this)"></figure>
+          <figure class="look look-3 zoom reveal" data-file="look3.jpg"><img src="images/look3.jpg" alt="Lookbook 3" loading="lazy" onerror="imgFail(this)"></figure>
+        </div>
+        <div class="look-col col-c">
+          <figure class="look look-4 zoom reveal" data-file="look4.jpg"><img src="images/look4.jpg" alt="Lookbook 4" loading="lazy" onerror="imgFail(this)"></figure>
+          <figure class="look look-5 zoom reveal" data-file="look5.jpg"><img src="images/look5.jpg" alt="Lookbook 5" loading="lazy" onerror="imgFail(this)"></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <h2 class="section-title reveal">Contact</h2>
+      <p class="lead reveal">Let's work together</p>
+      <div class="btns reveal">
+        <a class="btn" id="btnEmail" href="#">Email</a>
+        <a class="btn" id="btnCall" href="#" hidden>Call</a>
+        <span class="email-text" id="emailText"></span>
+      </div>
+    </div>
+  </section>
+
+  <footer id="footer"></footer>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="사진 크게 보기">
+    <button type="button" id="lbClose" aria-label="닫기">&times;</button>
+    <img id="lbImg" src="" alt="">
+  </div>
+
+<script>
+/* ===== 수정은 이 CONFIG 한 곳에서만 ===== */
+const CONFIG = {
+  name: "Jeongjae Song",
+  nameKo: "송정재",   // 한글 이름이 다르면 수정
+  tagline: "Bright, warm and full of life",
+  email: "sjj0119@naver.com",
+  phone: "010-2105-4031"   // 비우면 Call 버튼 숨김
+};
+
+(function () {
+  const $ = (id) => document.getElementById(id);
+
+  /* 이름·소개 */
+  $("heroName").textContent = CONFIG.name;
+  $("tagline").textContent = CONFIG.tagline;
+  $("footer").textContent = "© " + new Date().getFullYear() + " " + CONFIG.name + " (" + CONFIG.nameKo + ")";
+
+  /* 연락처: 문자열을 나눠 조립하여 HTML에 평문이 남지 않게 함 */
+  const user = CONFIG.email.split("@")[0];
+  const host = CONFIG.email.split("@")[1];
+  if (user && host) {
+    const addr = [user, host].join(String.fromCharCode(64));
+    $("btnEmail").href = "mail" + "to:" + addr;
+    $("emailText").textContent = addr;
+  } else {
+    $("btnEmail").hidden = true;
+  }
+  const digits = CONFIG.phone.replace(/[^0-9+]/g, "");
+  if (digits) {
+    $("btnCall").href = "t" + "el:" + digits;
+    $("btnCall").hidden = false;
+  }
+
+  /* 섹션 페이드인 */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+
+  /* 라이트박스 */
+  const lb = $("lightbox"), lbImg = $("lbImg");
+  const close = () => { lb.classList.remove("open"); };
+  document.querySelectorAll(".look").forEach((fig) => {
+    fig.addEventListener("click", () => {
+      if (fig.classList.contains("ph")) return;
+      const img = fig.querySelector("img");
+      lbImg.src = img.src; lbImg.alt = img.alt;
+      lb.classList.add("open");
+    });
+  });
+  lb.addEventListener("click", (e) => { if (e.target !== lbImg) close(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+})();
+</script>
+</body>
+</html>
